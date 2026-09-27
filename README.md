@@ -1,8 +1,8 @@
 # Fastregex
 
 A C++ compile-time DFA regex engine under development. Includes a constexpr
-byte-regex parser, bounded Thompson NFA and DFA construction, and component tests.
-Matching is not implemented yet.
+byte-regex parser, bounded Thompson NFA and DFA construction, a portable full-match
+executor, and component tests.
 
 See the [language specification](docs/byte-regex.md) for syntax, examples,
 diagnostics and compilation limits.

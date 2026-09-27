@@ -18,3 +18,7 @@ add_test(NAME fastregex.nfa COMMAND fastregex_nfa_tests)
 add_executable(fastregex_dfa_tests dfa.cpp)
 target_link_libraries(fastregex_dfa_tests PRIVATE fastregex_compiler)
 add_test(NAME fastregex.dfa COMMAND fastregex_dfa_tests)
+
+add_executable(fastregex_dfa_match_tests dfa_match.cpp)
+target_link_libraries(fastregex_dfa_match_tests PRIVATE fastregex_compiler)
+add_test(NAME fastregex.dfa_match COMMAND fastregex_dfa_match_tests)
