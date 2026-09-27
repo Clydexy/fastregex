@@ -1,28 +1,13 @@
 #pragma once
 
 #include "compiler/ast.hpp"
+#include "compiler/diagnostic.hpp"
 
 #include <array>
 #include <cstddef>
-#include <cstdint>
 #include <string_view>
 
 namespace fastregex::compiler {
-
-enum class error_code : std::uint8_t {
-    none,
-    invalid_pattern,
-    pattern_bytes_exceeded,
-    nesting_exceeded,
-    ast_nodes_exceeded,
-    work_exceeded
-};
-
-struct diagnostic {
-    error_code code = error_code::none;
-    std::size_t offset = 0;
-    constexpr bool operator==(const diagnostic&) const = default;
-};
 
 // Internal compile-time overrides keep boundary tests small; no public options API.
 struct parser_limits {

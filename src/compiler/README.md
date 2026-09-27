@@ -8,6 +8,9 @@ target. They are not part of the consumer-facing API.
 | `ast.hpp` | Fixed-capacity node and byte-set arenas, integer IDs, source spans |
 | `parser.hpp` | `parse(pattern)`, shared by runtime and constant evaluation |
 | `ast_dump.hpp` | `dump_ast(tree)`, deterministic text in arena order |
+| `nfa.hpp` | Bounded Thompson epsilon-NFA representation and AST lowering |
+| `epsilon_closure.hpp` | Cycle-safe, bounded epsilon-closure traversal |
+| `nfa_dump.hpp` | Deterministic text and Graphviz DOT dumps |
 
 `parse` accepts an explicit-length `std::string_view` or a terminated character
 array. The array overload excludes only the final terminator and preserves
