@@ -7,9 +7,8 @@ not implemented yet.
 See the [language specification](docs/byte-regex.md) for syntax, examples,
 diagnostics and compilation limits.
 
-Contributor instructions and pre-commit/pre-push checks are in
-[AGENTS.md](AGENTS.md). Static analysis uses `.clang-tidy`; formatting uses
-`.clang-format`. These are development tools, not consumer dependencies.
+Static analysis uses `.clang-tidy`; formatting uses `.clang-format`.
+These are development tools, not consumer dependencies.
 
 ## Prerequisites
 

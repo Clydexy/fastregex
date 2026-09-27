@@ -1,7 +1,8 @@
 /build/
 /CMakeUserPresets.json
+/AGENTS.md
 
-# Local research and planning; the shared project plan lives in Linear.
+# Private local research and planning.
 /RESEARCH.md
 /DESIGN.md
 /LINEAR_PLAN.json
