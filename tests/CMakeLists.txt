@@ -1,0 +1,8 @@
+add_executable(fastregex_public_smoke public_smoke.cpp)
+target_link_libraries(fastregex_public_smoke PRIVATE fastregex::fastregex)
+set_target_properties(fastregex_public_smoke PROPERTIES CXX_STANDARD 11 CXX_STANDARD_REQUIRED YES)
+add_test(NAME fastregex.public_smoke COMMAND fastregex_public_smoke)
+
+add_executable(fastregex_compiler_smoke compiler_smoke.cpp)
+target_link_libraries(fastregex_compiler_smoke PRIVATE fastregex_compiler)
+add_test(NAME fastregex.compiler_smoke COMMAND fastregex_compiler_smoke)
