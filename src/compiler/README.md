@@ -11,6 +11,8 @@ target. They are not part of the consumer-facing API.
 | `nfa.hpp` | Bounded Thompson epsilon-NFA representation and AST lowering |
 | `epsilon_closure.hpp` | Cycle-safe, bounded epsilon-closure traversal |
 | `nfa_dump.hpp` | Deterministic text and Graphviz DOT dumps |
+| `dfa.hpp` | Bounded subset construction and immutable DFA representation |
+| `dfa_dump.hpp` | Deterministic text and Graphviz DOT dumps |
 
 `parse` accepts an explicit-length `std::string_view` or a terminated character
 array. The array overload excludes only the final terminator and preserves

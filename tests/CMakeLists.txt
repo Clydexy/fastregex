@@ -14,3 +14,7 @@ add_test(NAME fastregex.parser COMMAND fastregex_parser_tests)
 add_executable(fastregex_nfa_tests nfa.cpp)
 target_link_libraries(fastregex_nfa_tests PRIVATE fastregex_compiler)
 add_test(NAME fastregex.nfa COMMAND fastregex_nfa_tests)
+
+add_executable(fastregex_dfa_tests dfa.cpp)
+target_link_libraries(fastregex_dfa_tests PRIVATE fastregex_compiler)
+add_test(NAME fastregex.dfa COMMAND fastregex_dfa_tests)

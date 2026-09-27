@@ -13,6 +13,8 @@ enum class error_code : std::uint8_t {
     ast_nodes_exceeded,
     nfa_states_exceeded,
     nfa_edges_exceeded,
+    dfa_states_exceeded,
+    transitions_exceeded,
     work_exceeded
 };
 
