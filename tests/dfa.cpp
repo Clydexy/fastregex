@@ -162,6 +162,19 @@ constexpr bool stable_numbering() {
     return first && second && first.machine == second.machine;
 }
 
+constexpr bool count_pass_agrees() {
+    const auto parsed = parse<parser_test_limits>("a");
+    const auto lowered = lower_nfa<nfa_test_limits>(parsed.tree);
+    const auto counted = count_dfa_states<dfa_test_limits>(lowered.graph);
+    const auto compiled = determinize<dfa_test_limits>(lowered.graph);
+    return counted && compiled && counted.error == compiled.error &&
+           counted.work_used == compiled.work_used &&
+           counted.machine.state_count == compiled.machine.state_count &&
+           counted.machine.transition_count == compiled.machine.transition_count &&
+           counted.machine.start == compiled.machine.start &&
+           counted.machine.sink == compiled.machine.sink;
+}
+
 bool default_limits_smoke() {
     const auto parsed = parse<parser_test_limits>("a");
     const auto lowered = lower_nfa<nfa_test_limits>(parsed.tree);
@@ -201,6 +214,7 @@ static_assert(epsilon_states());
 static_assert(alternate_states());
 static_assert(star_states());
 static_assert(limits());
+static_assert(count_pass_agrees());
 
 bool dumps() {
     const auto compiled = compile("a");
@@ -231,7 +245,8 @@ bool dumps() {
 
 bool runtime_cases() {
     return languages() && literal_states() && epsilon_states() && alternate_states() &&
-           star_states() && stable_numbering() && limits() && default_limits_smoke();
+           star_states() && stable_numbering() && count_pass_agrees() && limits() &&
+           default_limits_smoke();
 }
 
 } // namespace

@@ -2,7 +2,7 @@
 
 A C++ compile-time DFA regex engine under development. Includes a constexpr
 byte-regex parser, bounded Thompson NFA and DFA construction, a portable full-match
-executor, and component tests.
+executor, and an enforced compile-time pattern API.
 
 See the [language specification](docs/byte-regex.md) for syntax, examples,
 diagnostics and compilation limits.
@@ -34,7 +34,7 @@ ctest --preset release
 ```
 
 Build outputs are separated under `build/debug` and `build/release`. Both
-presets run public-header and compiler smoke tests plus parser, NFA and DFA component tests.
+presets run public-header and compiler smoke tests plus parser, NFA, DFA and static API tests.
 Failures return nonzero even with Release assertions disabled. No test framework
 download is required. Add component tests under `tests/` with each implementation.
 
@@ -47,14 +47,26 @@ changing compiler in an existing configuration.
 ```cmake
 add_subdirectory(path/to/fastregex)
 add_executable(myapp main.cpp)
-target_link_libraries(myapp PRIVATE fastregex::fastregex)
+target_link_libraries(myapp PRIVATE fastregex::compile_time)
 ```
 
-The public interface currently exposes only `<fastregex/version.hpp>` and needs
-C++11. Compiler development uses the separate, internal `fastregex_compiler`
-target and C++23. Linking the public target does not expose `src/` or impose the
-compiler's language requirement. Installed packages, generated pattern helpers,
-and matching APIs are later work.
+```cpp
+#include <fastregex/regex.hpp>
+
+static_assert(fastregex::full_match<"a(b|c)*">("abcb"));
+bool matched = fastregex::full_match<"[a-c]*">(input);
+```
+
+| Target | Requirement | Purpose |
+| --- | --- | --- |
+| `fastregex::compile_time` | C++23 | Compile fixed-string patterns and run full matches |
+| `fastregex::fastregex` | C++11 | Version header only |
+
+Each template pattern is compiled by a `consteval` pipeline into an exact-capacity
+DFA. Calls execute that artifact and never parse a pattern at runtime. Invalid
+patterns fail compilation with a named error code; the diagnostic's
+`compile_failure<code, offset>` shows the source-byte offset. Limits are listed in
+the [language specification](docs/byte-regex.md#compilation-limits).
 
 `FASTREGEX_BUILD_TESTS` defaults to ON for a standalone build and OFF when used
 via `add_subdirectory` or FetchContent. `FASTREGEX_BUILD_BENCHMARKS` defaults to

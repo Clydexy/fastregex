@@ -15,6 +15,9 @@ target. They are not part of the consumer-facing API.
 | `dfa_match.hpp` | Allocation-free portable full-string DFA executor |
 | `dfa_dump.hpp` | Deterministic text and Graphviz DOT dumps |
 
+The public `<fastregex/regex.hpp>` wrapper performs parsing, lowering, DFA state
+counting and exact-capacity construction during constant evaluation.
+
 `parse` accepts an explicit-length `std::string_view` or a terminated character
 array. The array overload excludes only the final terminator and preserves
 embedded NUL. On failure, the result has a diagnostic and an empty tree.
