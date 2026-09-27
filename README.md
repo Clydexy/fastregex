@@ -19,13 +19,6 @@ These are development tools, not consumer dependencies.
   are not yet validated; future compiler components may need additional C++23
   library support. The scaffold tests `if consteval` in both evaluation modes.
 
-On macOS, install Xcode or the Command Line Tools (`xcode-select --install`).
-If tools report an unaccepted Xcode license, run `sudo xcodebuild -license`
-in a terminal and review and accept the agreement before building. A full Xcode
-installation may also require `sudo xcodebuild -runFirstLaunch`.
-Use `xcode-select -p` to inspect the selected developer directory.
-Install CMake and Ninja separately (for example, `brew install cmake ninja`).
-
 ## Configure, build and test
 
 From a clean checkout at the repository root:
