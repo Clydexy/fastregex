@@ -1,0 +1,10 @@
+/build/
+/CMakeUserPresets.json
+
+# Local research and planning; the shared project plan lives in Linear.
+/RESEARCH.md
+/DESIGN.md
+/LINEAR_PLAN.json
+/LINEAR_LINKS.json
+/planning/
+/docs/planning/
