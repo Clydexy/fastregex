@@ -38,6 +38,13 @@ presets run public-header and compiler smoke tests plus parser, NFA, DFA and sta
 Failures return nonzero even with Release assertions disabled. No test framework
 download is required. Add component tests under `tests/` with each implementation.
 
+The Phase 1 regression test runs the same operator and boundary-byte corpus through
+constant evaluation and the runtime compiler pipeline. Run it alone with:
+
+```sh
+ctest --preset debug -R fastregex.phase1_regression --output-on-failure
+```
+
 To select another compiler, set `CXX` before the first configure, or create an
 ignored `CMakeUserPresets.json`. Remove the affected build directory before
 changing compiler in an existing configuration.

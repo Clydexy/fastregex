@@ -27,6 +27,10 @@ add_executable(fastregex_static_api_tests static_api.cpp)
 target_link_libraries(fastregex_static_api_tests PRIVATE fastregex::compile_time)
 add_test(NAME fastregex.static_api COMMAND fastregex_static_api_tests)
 
+add_executable(fastregex_phase1_regression_tests phase1_regression.cpp)
+target_link_libraries(fastregex_phase1_regression_tests PRIVATE fastregex::compile_time)
+add_test(NAME fastregex.phase1_regression COMMAND fastregex_phase1_regression_tests)
+
 function(fastregex_expect_compile_failure name source diagnostic offset)
     try_compile(
         compiled
