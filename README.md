@@ -1,8 +1,8 @@
 # Fastregex
 
 A C++ compile-time DFA regex engine under development. Includes a constexpr
-byte-regex parser and component tests. Automata compilation and matching are
-not implemented yet.
+byte-regex parser, bounded Thompson NFA construction and component tests. DFA
+construction and matching are not implemented yet.
 
 See the [language specification](docs/byte-regex.md) for syntax, examples,
 diagnostics and compilation limits.
@@ -34,7 +34,7 @@ ctest --preset release
 ```
 
 Build outputs are separated under `build/debug` and `build/release`. Both
-presets run public-header and compiler smoke tests plus parser component tests.
+presets run public-header and compiler smoke tests plus parser and NFA component tests.
 Failures return nonzero even with Release assertions disabled. No test framework
 download is required. Add component tests under `tests/` with each implementation.
 

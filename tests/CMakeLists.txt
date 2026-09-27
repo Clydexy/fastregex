@@ -10,3 +10,7 @@ add_test(NAME fastregex.compiler_smoke COMMAND fastregex_compiler_smoke)
 add_executable(fastregex_parser_tests parser.cpp)
 target_link_libraries(fastregex_parser_tests PRIVATE fastregex_compiler)
 add_test(NAME fastregex.parser COMMAND fastregex_parser_tests)
+
+add_executable(fastregex_nfa_tests nfa.cpp)
+target_link_libraries(fastregex_nfa_tests PRIVATE fastregex_compiler)
+add_test(NAME fastregex.nfa COMMAND fastregex_nfa_tests)
