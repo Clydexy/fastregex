@@ -6,3 +6,7 @@ add_test(NAME fastregex.public_smoke COMMAND fastregex_public_smoke)
 add_executable(fastregex_compiler_smoke compiler_smoke.cpp)
 target_link_libraries(fastregex_compiler_smoke PRIVATE fastregex_compiler)
 add_test(NAME fastregex.compiler_smoke COMMAND fastregex_compiler_smoke)
+
+add_executable(fastregex_parser_tests parser.cpp)
+target_link_libraries(fastregex_parser_tests PRIVATE fastregex_compiler)
+add_test(NAME fastregex.parser COMMAND fastregex_parser_tests)
