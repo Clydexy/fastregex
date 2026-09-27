@@ -2,6 +2,9 @@
 
 ## Scope and architecture
 
+- Prioritise implementation simplicity over regex compatibility or user-facing
+  convenience. Start with the smallest specified language; add syntax, public
+  options and detailed diagnostics only when they serve a concrete need.
 - Build a byte-oriented, full-string DFA regex engine. Matching uses explicit
   lengths and unsigned bytes, including embedded NUL. Keep the NFA as a compiler
   intermediate; do not introduce backtracking or an implicit NFA fallback.
@@ -16,11 +19,13 @@
   encoding and object packaging separate. Initial native target: macOS arm64.
 - Make output deterministic. Check equivalence when changing automata and
   measure runtime, code size and compilation cost when claiming an optimisation.
-- The shared plan and design are in the
-  [Linear project](https://linear.app/compile-time-regex/project/fastregex-compile-time-dfa-engine-6b3db65da5ba).
-  Work within the requested issue's scope. Local research/planning files are
+- Work within the requested scope. Local research/planning files are
   ignored deliberately; do not force-add them. Keep permanent API/build docs,
   tests and this file tracked.
+- Keep public documentation concise, using simple tables and examples. Never
+  include internal issue IDs, tracker links or private planning references.
+- Public specifications describe supported behaviour, limits and errors. Keep
+  roadmaps, implementation advice and contributor instructions out of them.
 
 ## Code conventions
 

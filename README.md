@@ -2,8 +2,10 @@
 
 A C++ compile-time DFA regex engine under development. This initial scaffold
 provides build targets and a test harness; regex compilation and matching are
-not implemented yet. The proposed architecture and milestone plan live in the
-[Linear project](https://linear.app/compile-time-regex/project/fastregex-compile-time-dfa-engine-6b3db65da5ba).
+not implemented yet.
+
+See the [language specification](docs/byte-regex.md) for syntax, examples,
+diagnostics and compilation limits.
 
 Contributor instructions and pre-commit/pre-push checks are in
 [AGENTS.md](AGENTS.md). Static analysis uses `.clang-tidy`; formatting uses
@@ -42,8 +44,7 @@ ctest --preset release
 Build outputs are separated under `build/debug` and `build/release`. Both
 presets run a public-header smoke test and a C++23 compiler-target smoke test.
 Failures return nonzero even with Release assertions disabled. No test framework
-download is required. Add component tests under `tests/` with each implementation;
-these smoke tests do not replace the milestone's end-to-end tests.
+download is required. Add component tests under `tests/` with each implementation.
 
 To select another compiler, set `CXX` before the first configure, or create an
 ignored `CMakeUserPresets.json`. Remove the affected build directory before
@@ -84,3 +85,4 @@ cmake --build build/library
 | `tools/` | Future host emitters and developer utilities |
 | `benchmarks/` | Optional performance measurements |
 | `examples/` | Future runnable consumer examples |
+| `docs/` | Normative language and implementation contracts |
