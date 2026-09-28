@@ -25,7 +25,7 @@ constexpr bool accepts(const dfa<StateCapacity>& machine, std::string_view subje
     auto state = machine.start;
     for (const char character : subject) {
         const auto byte = static_cast<std::uint8_t>(static_cast<unsigned char>(character));
-        state = machine.states[state].transitions[byte];
+        state = transition_for_byte(machine, state, byte);
     }
     return machine.states[state].accepting;
 }
@@ -38,7 +38,9 @@ constexpr bool is_complete_and_reachable(const dfa<StateCapacity>& machine) {
         return false;
     }
     for (std::size_t state = 0; state < machine.state_count; ++state) {
-        for (const auto target : machine.states[state].transitions) {
+        for (std::size_t byte = 0; byte < byte_alphabet_size; ++byte) {
+            const auto target = transition_for_byte(machine, static_cast<dfa_state_id>(state),
+                                                    static_cast<std::uint8_t>(byte));
             if (target >= machine.state_count) {
                 return false;
             }
@@ -53,7 +55,9 @@ constexpr bool is_complete_and_reachable(const dfa<StateCapacity>& machine) {
     worklist[tail++] = machine.start;
     while (head < tail) {
         const auto state = worklist[head++];
-        for (const auto target : machine.states[state].transitions) {
+        for (std::size_t byte = 0; byte < byte_alphabet_size; ++byte) {
+            const auto target = transition_for_byte(machine, static_cast<dfa_state_id>(state),
+                                                    static_cast<std::uint8_t>(byte));
             if (!reached[target]) {
                 reached[target] = true;
                 worklist[tail++] = target;
@@ -171,6 +175,7 @@ constexpr bool count_pass_agrees() {
            counted.work_used == compiled.work_used &&
            counted.machine.state_count == compiled.machine.state_count &&
            counted.machine.transition_count == compiled.machine.transition_count &&
+           counted.machine.byte_class_count == compiled.machine.byte_class_count &&
            counted.machine.start == compiled.machine.start &&
            counted.machine.sink == compiled.machine.sink;
 }

@@ -40,10 +40,13 @@ template <std::size_t StateCapacity> std::string dump_dfa(const dfa<StateCapacit
         output += '\n';
     }
     for (std::size_t state = 0; state < machine.state_count; ++state) {
-        const auto& transitions = machine.states[state].transitions;
         for (std::size_t first = 0; first < byte_alphabet_size;) {
             auto last = first;
-            while (last + 1 < byte_alphabet_size && transitions[last + 1] == transitions[first]) {
+            const auto target = transition_for_byte(machine, static_cast<dfa_state_id>(state),
+                                                    static_cast<std::uint8_t>(first));
+            while (last + 1 < byte_alphabet_size &&
+                   transition_for_byte(machine, static_cast<dfa_state_id>(state),
+                                       static_cast<std::uint8_t>(last + 1)) == target) {
                 ++last;
             }
             output += "transition ";
@@ -51,7 +54,7 @@ template <std::size_t StateCapacity> std::string dump_dfa(const dfa<StateCapacit
             output += ' ';
             detail::append_byte_range(output, first, last);
             output += " -> ";
-            detail::append_number(output, transitions[first]);
+            detail::append_number(output, target);
             output += '\n';
             first = last + 1;
         }
@@ -73,16 +76,19 @@ template <std::size_t StateCapacity> std::string dump_dfa_dot(const dfa<StateCap
         output += ";\n";
     }
     for (std::size_t state = 0; state < machine.state_count; ++state) {
-        const auto& transitions = machine.states[state].transitions;
         for (std::size_t first = 0; first < byte_alphabet_size;) {
             auto last = first;
-            while (last + 1 < byte_alphabet_size && transitions[last + 1] == transitions[first]) {
+            const auto target = transition_for_byte(machine, static_cast<dfa_state_id>(state),
+                                                    static_cast<std::uint8_t>(first));
+            while (last + 1 < byte_alphabet_size &&
+                   transition_for_byte(machine, static_cast<dfa_state_id>(state),
+                                       static_cast<std::uint8_t>(last + 1)) == target) {
                 ++last;
             }
             output += "  ";
             detail::append_number(output, state);
             output += " -> ";
-            detail::append_number(output, transitions[first]);
+            detail::append_number(output, target);
             output += " [label=\"";
             detail::append_byte_range(output, first, last);
             output += "\"];\n";

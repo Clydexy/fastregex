@@ -22,7 +22,7 @@ constexpr bool full_match_impl(const dfa<StateCapacity>& machine, std::size_t le
 
     auto state = machine.start;
     for (std::size_t offset = 0; offset < length; ++offset) {
-        const auto next = machine.states[state].transitions[read_byte(offset)];
+        const auto next = transition_for_byte(machine, state, read_byte(offset));
         if (next == machine.sink) {
             return false;
         }

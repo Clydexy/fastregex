@@ -50,6 +50,8 @@ bool artifact_agreement() {
     constexpr const auto& constant = fastregex::detail::compiled_pattern<"a(b|[c-e])*">;
     if (!parsed || !lowered || !runtime || runtime.machine.state_count != constant.state_count ||
         runtime.machine.transition_count != constant.transition_count ||
+        runtime.machine.byte_class_count != constant.byte_class_count ||
+        runtime.machine.byte_classes != constant.byte_classes ||
         runtime.machine.start != constant.start || runtime.machine.sink != constant.sink) {
         return false;
     }
