@@ -84,7 +84,9 @@ Syntax errors return `invalid_pattern` and the zero-based source-byte offset
 where parsing first fails. At end-of-input, the offset is the pattern length.
 A descending range points to the start of its right endpoint. Runtime and
 constexpr parsing report the same error. Static compilation rejects invalid
-patterns at C++ compile time; a failed compilation produces no matcher.
+patterns at C++ compile time; a failed compilation produces no matcher. The
+diagnostic names the error and exposes its source-byte offset through
+`compile_failure<code, offset>`.
 
 | Invalid pattern | Offset |
 | --- | ---: |

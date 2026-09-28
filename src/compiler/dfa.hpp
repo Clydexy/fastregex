@@ -50,17 +50,34 @@ template <std::size_t StateCapacity> struct determinize_result {
     }
 };
 
+struct dfa_shape {
+    std::size_t state_count = 0;
+    std::size_t transition_count = 0;
+    dfa_state_id start = no_dfa_state;
+    dfa_state_id sink = no_dfa_state;
+};
+
+struct determinize_count_result {
+    dfa_shape machine{};
+    diagnostic error{};
+    std::size_t work_used = 0;
+
+    constexpr explicit operator bool() const {
+        return error.code == error_code::none;
+    }
+};
+
 namespace detail {
 
 template <dfa_limits Limits, std::size_t NfaStateCapacity, std::size_t NfaEdgeCapacity,
-          std::size_t NfaSetCapacity>
+          std::size_t NfaSetCapacity, typename Result, bool StoreTransitions>
 class dfa_builder {
     static_assert(Limits.states < no_dfa_state);
 
     using state_set = nfa_state_set<NfaStateCapacity>;
 
     const nfa<NfaStateCapacity, NfaEdgeCapacity, NfaSetCapacity>& graph_;
-    determinize_result<Limits.states>& result_;
+    Result& result_;
     std::vector<state_set> subsets_;
 
     constexpr std::size_t active_word_count() const {
@@ -200,8 +217,10 @@ class dfa_builder {
         }
         const auto id = static_cast<dfa_state_id>(machine.state_count++);
         machine.transition_count += byte_alphabet_size;
-        machine.states[id].accepting = accepting;
-        machine.states[id].transitions.fill(machine.sink);
+        if constexpr (StoreTransitions) {
+            machine.states[id].accepting = accepting;
+            machine.states[id].transitions.fill(machine.sink);
+        }
         subsets_.push_back(subset);
         return id;
     }
@@ -222,7 +241,7 @@ class dfa_builder {
 
   public:
     constexpr dfa_builder(const nfa<NfaStateCapacity, NfaEdgeCapacity, NfaSetCapacity>& graph,
-                          determinize_result<Limits.states>& result)
+                          Result& result)
         : graph_(graph), result_(result) {}
 
     constexpr void run() {
@@ -258,7 +277,9 @@ class dfa_builder {
                 const bool empty_destination = subset_empty(destination);
                 const auto target = empty_destination ? sink : intern(destination);
                 if (result_) {
-                    result_.machine.states[source].transitions[byte] = target;
+                    if constexpr (StoreTransitions) {
+                        result_.machine.states[source].transitions[byte] = target;
+                    }
                 }
             }
         }
@@ -276,7 +297,19 @@ template <dfa_limits Limits = dfa_limits{}, std::size_t NfaStateCapacity,
 constexpr determinize_result<Limits.states>
     determinize(const nfa<NfaStateCapacity, NfaEdgeCapacity, NfaSetCapacity>& graph) {
     determinize_result<Limits.states> result;
-    detail::dfa_builder<Limits, NfaStateCapacity, NfaEdgeCapacity, NfaSetCapacity>{graph, result}
+    detail::dfa_builder<Limits, NfaStateCapacity, NfaEdgeCapacity, NfaSetCapacity,
+                        determinize_result<Limits.states>, true>{graph, result}
+        .run();
+    return result;
+}
+
+template <dfa_limits Limits = dfa_limits{}, std::size_t NfaStateCapacity,
+          std::size_t NfaEdgeCapacity, std::size_t NfaSetCapacity>
+constexpr determinize_count_result
+    count_dfa_states(const nfa<NfaStateCapacity, NfaEdgeCapacity, NfaSetCapacity>& graph) {
+    determinize_count_result result;
+    detail::dfa_builder<Limits, NfaStateCapacity, NfaEdgeCapacity, NfaSetCapacity,
+                        determinize_count_result, false>{graph, result}
         .run();
     return result;
 }

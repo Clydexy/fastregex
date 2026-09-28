@@ -22,3 +22,34 @@ add_test(NAME fastregex.dfa COMMAND fastregex_dfa_tests)
 add_executable(fastregex_dfa_match_tests dfa_match.cpp)
 target_link_libraries(fastregex_dfa_match_tests PRIVATE fastregex_compiler)
 add_test(NAME fastregex.dfa_match COMMAND fastregex_dfa_match_tests)
+
+add_executable(fastregex_static_api_tests static_api.cpp)
+target_link_libraries(fastregex_static_api_tests PRIVATE fastregex::compile_time)
+add_test(NAME fastregex.static_api COMMAND fastregex_static_api_tests)
+
+function(fastregex_expect_compile_failure name source diagnostic offset)
+    try_compile(
+        compiled
+        "${CMAKE_CURRENT_BINARY_DIR}/compile_fail/${name}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/compile_fail"
+        fastregex_compile_fail
+        compile_fail
+        CMAKE_FLAGS
+            "-DFASTREGEX_SOURCE_DIR=${PROJECT_SOURCE_DIR}"
+            "-DCASE_SOURCE=${CMAKE_CURRENT_SOURCE_DIR}/compile_fail/${source}"
+        OUTPUT_VARIABLE output)
+    if(compiled)
+        message(FATAL_ERROR "${name} unexpectedly compiled")
+    endif()
+    if(NOT output MATCHES "fastregex: ${diagnostic}")
+        message(FATAL_ERROR "${name} did not report ${diagnostic}:\n${output}")
+    endif()
+    if(NOT output MATCHES
+       "compile_failure<fastregex::compile_error::${diagnostic}, ${offset}")
+        message(FATAL_ERROR "${name} did not report offset ${offset}:\n${output}")
+    endif()
+endfunction()
+
+fastregex_expect_compile_failure(invalid_pattern invalid_pattern.cpp invalid_pattern 2)
+fastregex_expect_compile_failure(
+    pattern_bytes_exceeded pattern_bytes_exceeded.cpp pattern_bytes_exceeded 0)
