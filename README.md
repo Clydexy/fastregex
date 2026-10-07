@@ -7,6 +7,8 @@ executor, and an enforced compile-time pattern API.
 See the [language specification](docs/byte-regex.md) for syntax, examples,
 diagnostics and compilation limits.
 
+For a runnable demo, see the [examples guide](examples/README.md).
+
 Static analysis uses `.clang-tidy`; formatting uses `.clang-format`.
 These are development tools, not consumer dependencies.
 
@@ -77,8 +79,9 @@ the [language specification](docs/byte-regex.md#compilation-limits).
 
 `FASTREGEX_BUILD_TESTS` defaults to ON for a standalone build and OFF when used
 via `add_subdirectory` or FetchContent. `FASTREGEX_BUILD_BENCHMARKS` defaults to
-OFF everywhere; its directory is currently a placeholder. Explicitly disable
-both for a minimal standalone configure:
+OFF everywhere; its directory is currently a placeholder. `FASTREGEX_BUILD_EXAMPLES`
+defaults to OFF; enable it to build `fastregex_demo`. Explicitly disable
+tests and benchmarks for a minimal standalone configure:
 
 ```sh
 cmake -S . -B build/library -G Ninja \
@@ -95,5 +98,5 @@ cmake --build build/library
 | `tests/` | CTest smoke and future component tests |
 | `tools/` | Future host emitters and developer utilities |
 | `benchmarks/` | Optional performance measurements |
-| `examples/` | Future runnable consumer examples |
+| `examples/` | Runnable consumer demo and build instructions |
 | `docs/` | Normative language and implementation contracts |

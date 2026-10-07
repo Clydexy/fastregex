@@ -7,6 +7,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(FASTREGEX_BUILD_TESTS "Build fastregex component tests" ${PROJECT_IS_TOP_LEVEL})
 option(FASTREGEX_BUILD_BENCHMARKS "Build fastregex benchmarks" OFF)
+option(FASTREGEX_BUILD_EXAMPLES "Build fastregex examples" OFF)
 
 # The version-only target remains usable by C++11 consumers.
 add_library(fastregex INTERFACE)
@@ -37,4 +38,8 @@ endif()
 
 if(FASTREGEX_BUILD_BENCHMARKS)
     add_subdirectory(benchmarks)
+endif()
+
+if(FASTREGEX_BUILD_EXAMPLES)
+    add_subdirectory(examples)
 endif()
