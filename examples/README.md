@@ -26,23 +26,6 @@ cmake --build build/demo --target fastregex_demo
 ./build/demo/examples/fastregex_demo abcb
 ```
 
-| Part | Meaning |
-| --- | --- |
-| `cmake -S .` | Read the project configuration from the current directory |
-| `-B build/demo` | Write generated build files into `build/demo` |
-| `-G Ninja` | Generate a build that Ninja can execute |
-| `-DFASTREGEX_BUILD_EXAMPLES=ON` | Enable the optional demo target |
-| `-DFASTREGEX_BUILD_TESTS=OFF` | Skip building the library's test programs |
-| `cmake --build build/demo` | Run the build tool for that build directory |
-| `--target fastregex_demo` | Build the demo executable |
-| `./build/demo/examples/fastregex_demo abcb` | Run the demo with `abcb` as its input |
-
-The first command configures the build; the second compiles the demo. The
-backslash at the end of a shell line continues the same command on the next
-line; you can also write the configure command on one line.
-
-On Windows, the executable is `build/demo/examples/fastregex_demo.exe`.
-
 Expected output:
 
 ```text
