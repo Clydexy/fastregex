@@ -26,13 +26,29 @@ template <std::size_t StateCapacity> struct dfa {
     static_assert(StateCapacity < no_dfa_state);
 
     std::array<dfa_state, StateCapacity> states{};
+    std::array<std::uint8_t, byte_alphabet_size> byte_classes{};
     std::size_t state_count = 0;
     std::size_t transition_count = 0;
+    std::size_t byte_class_count = 0;
     dfa_state_id start = no_dfa_state;
     dfa_state_id sink = no_dfa_state;
 
     constexpr bool operator==(const dfa&) const = default;
 };
+
+template <std::size_t StateCapacity>
+constexpr dfa_state_id transition_for_byte(const dfa<StateCapacity>& machine, dfa_state_id state,
+                                           std::uint8_t byte) noexcept {
+    if (state >= machine.state_count || machine.byte_class_count == 0 ||
+        machine.byte_class_count > byte_alphabet_size) {
+        return no_dfa_state;
+    }
+    const auto byte_class = machine.byte_classes[byte];
+    if (byte_class >= machine.byte_class_count) {
+        return no_dfa_state;
+    }
+    return machine.states[state].transitions[byte_class];
+}
 
 struct dfa_limits {
     std::size_t states = 4'096;
@@ -53,6 +69,7 @@ template <std::size_t StateCapacity> struct determinize_result {
 struct dfa_shape {
     std::size_t state_count = 0;
     std::size_t transition_count = 0;
+    std::size_t byte_class_count = 0;
     dfa_state_id start = no_dfa_state;
     dfa_state_id sink = no_dfa_state;
 };
@@ -248,6 +265,13 @@ class dfa_builder {
         if (graph_.entry >= graph_.state_count || graph_.accept >= graph_.state_count) {
             fail(error_code::invalid_pattern);
             return;
+        }
+
+        result_.machine.byte_class_count = byte_alphabet_size;
+        if constexpr (StoreTransitions) {
+            for (std::size_t byte = 0; byte < byte_alphabet_size; ++byte) {
+                result_.machine.byte_classes[byte] = static_cast<std::uint8_t>(byte);
+            }
         }
 
         state_set empty;

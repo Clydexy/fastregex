@@ -23,6 +23,14 @@ add_executable(fastregex_dfa_match_tests dfa_match.cpp)
 target_link_libraries(fastregex_dfa_match_tests PRIVATE fastregex_compiler)
 add_test(NAME fastregex.dfa_match COMMAND fastregex_dfa_match_tests)
 
+add_executable(fastregex_dfa_equivalence_tests dfa_equivalence.cpp)
+target_link_libraries(fastregex_dfa_equivalence_tests PRIVATE fastregex_compiler)
+add_test(NAME fastregex.dfa_equivalence COMMAND fastregex_dfa_equivalence_tests)
+
+add_executable(fastregex_dfa_optimize_tests dfa_optimize.cpp)
+target_link_libraries(fastregex_dfa_optimize_tests PRIVATE fastregex_compiler)
+add_test(NAME fastregex.dfa_optimize COMMAND fastregex_dfa_optimize_tests)
+
 add_executable(fastregex_static_api_tests static_api.cpp)
 target_link_libraries(fastregex_static_api_tests PRIVATE fastregex::compile_time)
 add_test(NAME fastregex.static_api COMMAND fastregex_static_api_tests)
